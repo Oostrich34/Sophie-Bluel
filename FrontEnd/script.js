@@ -18,6 +18,9 @@ let projets = await fetch("http://localhost:5678/api/works").then(response => re
 }*/
 
 
+
+
+
 // Récupération des projets depuis l'API
 let projets = await fetch("http://localhost:5678/api/works")
     .then(response => response.json());
@@ -113,3 +116,25 @@ function genererCategories(projets) {
 genererProjets(projets);
 genererCategories(projets);
 
+// Récupération des balises li dans la balise nav
+const navItems = document.querySelectorAll("nav li");
+// Récupération de la balise main
+const main = document.querySelector("main");
+
+// Clic sur le 3ème élément li (login)
+navItems[2].addEventListener("click", () => {
+    // Remplacement du contenu de la balise main par le formulaire de connexion
+    main.innerHTML = `
+        <section id="login">
+            <h2>Log In</h2>
+            <form action="#" method="post">
+                <label for="email">E-mail</label>
+                <input type="text" name="mail" id="mail">
+                <label for="password">Mot de passe</label>
+                <input type="password" name="password" id="password">
+                <input type="submit" value="Se connecter">
+                <a href="#">Mot de passe oublié</a>
+            </form>      
+        </section>
+    `;
+});
