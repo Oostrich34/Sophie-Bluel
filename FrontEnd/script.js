@@ -1,26 +1,3 @@
-// Récupération des "projets" dans la mémoire du navigateur (localStorage) s'il y en a
-/*let projets = window.localStorage.getItem("projets");
-
-// Si le localStorage est vide, récupération dans l'API
-if (projets === null) {
-
-let projets = await fetch("http://localhost:5678/api/works").then(response => response.json());
-
-    // Conversion de l'objet en chaîne JSON
-    const valeurProjets = JSON.stringify(projets);
-
-    // Sauvegarde des données dans le localStorage
-    window.localStorage.setItem("projets", valeurProjets);
-
-// Sinon, transformation des données en objet JavaScript
-    } else {
-    projets = JSON.parse(projets);
-}*/
-
-
-
-
-
 // Récupération des projets depuis l'API
 let projets = await fetch("http://localhost:5678/api/works")
     .then(response => response.json());
@@ -116,25 +93,87 @@ function genererCategories(projets) {
 genererProjets(projets);
 genererCategories(projets);
 
+
+
+// Retour à l'accueil
+
+// Récupération du logo dans la balise header
+const logo = document.querySelector("header h1");
+logo.style = "cursor: pointer;";
+// Clic sur le logo pour recharger la page
+logo.addEventListener("click", () => {
+    window.location.reload();
+});
+
+
+
+// Page de login
+
 // Récupération des balises li dans la balise nav
 const navItems = document.querySelectorAll("nav li");
+navItems.forEach(item => item.style = "cursor: pointer;");
 // Récupération de la balise main
 const main = document.querySelector("main");
 
 // Clic sur le 3ème élément li (login)
 navItems[2].addEventListener("click", () => {
+    navItems[2].style = "font-weight: bold;"
     // Remplacement du contenu de la balise main par le formulaire de connexion
-    main.innerHTML = `
-        <section id="login">
-            <h2>Log In</h2>
-            <form action="#" method="post">
-                <label for="email">E-mail</label>
-                <input type="text" name="mail" id="mail">
-                <label for="password">Mot de passe</label>
-                <input type="password" name="password" id="password">
-                <input type="submit" value="Se connecter">
-                <a href="#">Mot de passe oublié</a>
-            </form>      
-        </section>
-    `;
+    main.innerHTML = "";
+    const sectionForm = document.createElement("section");
+    sectionForm.setAttribute("id", "login");
+    const sectionTitle = document.createElement("h2");
+    sectionTitle.textContent = "Log In";
+    const formLogin = document.createElement("form");
+    formLogin.setAttribute("id", "formLogin");
+    formLogin.setAttribute("action", "#");
+    formLogin.setAttribute("method", "post");
+    const labelEmail = document.createElement("label");
+    labelEmail.setAttribute("for", "mail");
+    labelEmail.textContent = "E-mail";
+    const inputEmail = document.createElement("input");
+    inputEmail.setAttribute("type", "text");
+    inputEmail.setAttribute("name", "mail");
+    inputEmail.setAttribute("id", "mail");
+    const labelPassword = document.createElement("label");
+    labelPassword.setAttribute("for", "password");
+    labelPassword.textContent = "Mot de passe";
+    const inputPassword = document.createElement("input");
+    inputPassword.setAttribute("type", "password");
+    inputPassword.setAttribute("name", "password");
+    inputPassword.setAttribute("id", "password");
+    const inputSubmit = document.createElement("input");
+    inputSubmit.setAttribute("id", "loginSubmit");
+    inputSubmit.setAttribute("type", "submit");
+    inputSubmit.setAttribute("value", "Se connecter");
+    const linkForgot = document.createElement("a");
+    linkForgot.setAttribute("href", "#");
+    linkForgot.textContent = "Mot de passe oublié";
+    formLogin.appendChild(labelEmail);
+    formLogin.appendChild(inputEmail);
+    formLogin.appendChild(labelPassword);
+    formLogin.appendChild(inputPassword);
+    formLogin.appendChild(inputSubmit);
+    formLogin.appendChild(linkForgot);
+    sectionForm.appendChild(sectionTitle);
+    sectionForm.appendChild(formLogin);
+    main.appendChild(sectionForm);
+
+    
+
+
+    if (inputSubmit) {
+        inputSubmit.addEventListener("click", (e) => {
+            e.preventDefault();
+            const email = document.getElementById("mail").value;
+            const password = document.getElementById("password").value;
+            console.log(`Email: ${email}, Password: ${password}`);
+            // Ici, vous pouvez ajouter la logique pour envoyer les données à votre serveur
+        });
+    }
+
 });
+
+
+
+
