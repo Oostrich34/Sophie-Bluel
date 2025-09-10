@@ -1,3 +1,18 @@
+// Récupération du logo dans la balise header
+const logo = document.querySelector("header h1");
+logo.style = "cursor: pointer;";
+// Clic sur le logo pour recharger la page
+logo.addEventListener("click", () => {
+    window.location.reload();
+});
+
+// Récupération des balises li dans la balise nav
+const navItems = document.querySelectorAll("nav li");
+navItems.forEach(item => item.style = "cursor: pointer;");
+const main = document.querySelector("main");
+
+
+
 // Récupération des projets depuis l'API
 let projets = await fetch("http://localhost:5678/api/works")
     .then(response => response.json());
@@ -95,100 +110,124 @@ genererCategories(projets);
 
 
 
-// Retour à l'accueil
-
-// Récupération du logo dans la balise header
-const logo = document.querySelector("header h1");
-logo.style = "cursor: pointer;";
-// Clic sur le logo pour recharger la page
-logo.addEventListener("click", () => {
-    window.location.reload();
-});
+// --- Gestion du login/logout ---
 
 
+// Vérifie si un token existe au chargement de la page
+function majBoutonAuth() {
+    if (localStorage.getItem("token")) {
+        // Utilisateur connecté
+        navItems[2].textContent = "Logout";
+        navItems[2].onclick = () => {
+            localStorage.removeItem("token"); // Déconnexion
+            window.location.reload(); // Retour à l’accueil
+        };
+    } else {
+        // Utilisateur non connecté
+        navItems[2].textContent = "Login";
+        navItems[2].onclick = afficherFormLogin;
+    }
+}
+majBoutonAuth();
 
-// Page de login
-
-// Récupération des balises li dans la balise nav
-const navItems = document.querySelectorAll("nav li");
-navItems.forEach(item => item.style = "cursor: pointer;");
-// Récupération de la balise main
-const main = document.querySelector("main");
-
-// Clic sur le 3ème élément li (login)
-navItems[2].addEventListener("click", () => {
-    navItems[2].style = "font-weight: bold;"
-    // Remplacement du contenu de la balise main par le formulaire de connexion
+// --- Fonction d'affichage du formulaire de login ---
+function afficherFormLogin() {
+    navItems[2].style = "font-weight: bold;";
     main.innerHTML = "";
+
+    // Création section
     const sectionForm = document.createElement("section");
     sectionForm.setAttribute("id", "login");
+
+    // Titre
     const sectionTitle = document.createElement("h2");
     sectionTitle.textContent = "Log In";
+
+    // Formulaire
     const formLogin = document.createElement("form");
     formLogin.setAttribute("id", "formLogin");
     formLogin.setAttribute("action", "#");
     formLogin.setAttribute("method", "post");
+
+    // Label + input email
     const labelEmail = document.createElement("label");
     labelEmail.setAttribute("for", "mail");
     labelEmail.textContent = "E-mail";
+
     const inputEmail = document.createElement("input");
     inputEmail.setAttribute("type", "text");
     inputEmail.setAttribute("name", "mail");
     inputEmail.setAttribute("id", "mail");
+
+    // Label + input password
     const labelPassword = document.createElement("label");
     labelPassword.setAttribute("for", "password");
     labelPassword.textContent = "Mot de passe";
+
     const inputPassword = document.createElement("input");
     inputPassword.setAttribute("type", "password");
     inputPassword.setAttribute("name", "password");
     inputPassword.setAttribute("id", "password");
+
+    // Bouton submit
     const inputSubmit = document.createElement("input");
     inputSubmit.setAttribute("id", "loginSubmit");
     inputSubmit.setAttribute("type", "submit");
     inputSubmit.setAttribute("value", "Se connecter");
+
+    // Lien mot de passe oublié
     const linkForgot = document.createElement("a");
     linkForgot.setAttribute("href", "#");
     linkForgot.textContent = "Mot de passe oublié";
+
+    // Ajout des éléments dans le formulaire
     formLogin.appendChild(labelEmail);
     formLogin.appendChild(inputEmail);
     formLogin.appendChild(labelPassword);
     formLogin.appendChild(inputPassword);
     formLogin.appendChild(inputSubmit);
     formLogin.appendChild(linkForgot);
+
+    // Ajout du titre + formulaire dans la section
     sectionForm.appendChild(sectionTitle);
     sectionForm.appendChild(formLogin);
+
+    // Injection dans <main>
     main.appendChild(sectionForm);
 
-    // Clic sur le bouton de connexion
-    inputSubmit.addEventListener("click", (e) => {
+    // Gestion de la soumission
+    formLogin.addEventListener("submit", async (e) => {
         e.preventDefault();
         const email = document.getElementById("mail").value;
         const password = document.getElementById("password").value;
-        console.log(`Email: ${email}, Password: ${password}`);
-        // Vérification que les champs ne sont pas vides
+
         if (email === "" || password === "") {
             alert("Veuillez remplir tous les champs.");
             return;
         }
-         // Récupération des users et passwords depuis l'API
-        let users = fetch("http://localhost:5678/api/users/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: email, password: password })
-        })
-        .then(response => response.json());
-        users.then(data => {
+
+        try {
+            const response = await fetch("http://localhost:5678/api/users/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+
             if (data.token) {
-                // Stockage du token dans le localStorage
                 localStorage.setItem("token", data.token);
-                // Redirection vers la page d'accueil
-                window.location.href = "index.html";
+                alert("Connexion réussie !");
+                window.location.reload(); // retour à l’accueil
             } else {
                 alert("Email ou mot de passe incorrect.");
             }
-        });
+        } catch (error) {
+            alert("Erreur serveur. Réessayez plus tard.");
+        }
     });
-});
+}
+
 
 
 
