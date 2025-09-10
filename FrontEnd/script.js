@@ -170,6 +170,23 @@ navItems[2].addEventListener("click", () => {
             alert("Veuillez remplir tous les champs.");
             return;
         }
+         // Récupération des users et passwords depuis l'API
+        let users = fetch("http://localhost:5678/api/users/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: email, password: password })
+        })
+        .then(response => response.json());
+        users.then(data => {
+            if (data.token) {
+                // Stockage du token dans le localStorage
+                localStorage.setItem("token", data.token);
+                // Redirection vers la page d'accueil
+                window.location.href = "index.html";
+            } else {
+                alert("Email ou mot de passe incorrect.");
+            }
+        });
     });
 });
 
