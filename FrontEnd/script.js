@@ -159,19 +159,18 @@ navItems[2].addEventListener("click", () => {
     sectionForm.appendChild(formLogin);
     main.appendChild(sectionForm);
 
-    
-
-
-    if (inputSubmit) {
-        inputSubmit.addEventListener("click", (e) => {
-            e.preventDefault();
-            const email = document.getElementById("mail").value;
-            const password = document.getElementById("password").value;
-            console.log(`Email: ${email}, Password: ${password}`);
-            // Ici, vous pouvez ajouter la logique pour envoyer les données à votre serveur
-        });
-    }
-
+    // Clic sur le bouton de connexion
+    inputSubmit.addEventListener("click", (e) => {
+        e.preventDefault();
+        const email = document.getElementById("mail").value;
+        const password = document.getElementById("password").value;
+        console.log(`Email: ${email}, Password: ${password}`);
+        // Vérification que les champs ne sont pas vides
+        if (email === "" || password === "") {
+            alert("Veuillez remplir tous les champs.");
+            return;
+        }
+    });
 });
 
 
