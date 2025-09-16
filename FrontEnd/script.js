@@ -117,14 +117,14 @@ genererCategories(projets);
 function majBoutonAuth() {
     if (localStorage.getItem("token")) {
         // Utilisateur connecté
-        navItems[2].textContent = "Logout";
+        navItems[2].textContent = "logout";
         navItems[2].onclick = () => {
             localStorage.removeItem("token"); // Déconnexion
             window.location.reload(); // Retour à l’accueil
         };
     } else {
         // Utilisateur non connecté
-        navItems[2].textContent = "Login";
+        navItems[2].textContent = "login";
         navItems[2].onclick = afficherFormLogin;
     }
 }
