@@ -289,10 +289,11 @@ footer nav ul {
 
 /* Container images */
 .modal-gallery {
-    padding: 0 90px;
+    padding: 0 75px;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+	height: 400px;
 }
 
 /* Chaque figure */
@@ -324,14 +325,10 @@ footer nav ul {
 
 /* Ligne de séparation */
 .separator {
-    margin: 20px 0;
+    margin: 40px 70px 10px;
     border: none;
     height: 1px;
     background-color: #ccc;
-    top: 170px;
-    position: relative;
-    width: 450px;
-    left: 75px;
 }
 
 /* Bouton ajouter une photo */
@@ -339,8 +336,57 @@ footer nav ul {
     padding: 10px 20px;
     border: none;
     cursor: pointer;
-	top: 155px;
-    position: relative;
+	margin: auto;
+	color: white;
+    background-color: #1D6154;
+    border-radius: 60px;
 }
 
+.return-btn {
+	position: absolute;
+    top: 20px;
+    left: 20px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+}
 
+.form-add-photo {
+	width: 450px;
+	height: 200px;
+}
+
+.add-image-preview {
+	background: #E8F1F6;
+}
+
+.add-image-preview i {
+	display: flex;
+    color: #CBD6DC;
+    justify-content: center;
+    font-size: 5em;
+    padding-top: 25px;
+}
+
+.add-image-preview input {
+	display: flex;
+    background-color: #CBD6DC;
+    color: #306685;
+    border: none;
+    height: 40px;
+}
+
+.add-image-preview p {
+	text-align: center;
+    margin-top: 15px;
+}
+
+#addPhoto input, select {
+	height: 50px;
+	width: 100%;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	margin-top: 5px;
+}
