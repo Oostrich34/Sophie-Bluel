@@ -5,6 +5,17 @@
 import { projets, genererProjets } from "./gallery.js";
 
 export function activerModeEdition() {
+    // Barre Mode édition
+    if (!document.querySelector(".edit-bar")) {
+        const editBar = document.createElement("div");
+        editBar.classList.add("edit-bar");
+        editBar.innerHTML = 
+        `<i class="fa-regular fa-pen-to-square"></i>
+        <span>Mode édition</span>
+        `;
+        document.body.insertBefore(editBar, document.body.firstChild);
+    }
+
     const title = document.querySelector("#portfolio h2");
     if (!title) return;
 
@@ -87,7 +98,7 @@ export function ouvrirModaleEdition() {
 
     // Bouton ajouter une photo
     const addPhotoBtn = document.createElement("input");
-    addPhotoBtn.type = "button";
+    addPhotoBtn.type = "submit";
     addPhotoBtn.value = "Ajouter une photo";
     addPhotoBtn.classList.add("btn-add-photo");
 

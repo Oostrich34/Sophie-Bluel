@@ -221,6 +221,16 @@ footer nav ul {
 	margin: 2em;
 }
 
+.edit-bar {
+	background: black;
+	height: 50px;
+	display: flex;
+	color: white;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+}
+
 .edit-link {
 	margin-left: 20px;
 	font-size: 0.6em;
@@ -251,8 +261,8 @@ footer nav ul {
     background: #fff;
     padding: 20px;
     border-radius: 10px;
-    width: 500px;
-    height: 600px;           /* exactement comme avant */
+    width: 600px;
+    height: 650px;     
     overflow-y: auto;
     position: relative;
     display: flex;
@@ -262,8 +272,8 @@ footer nav ul {
 /* Titre */
 .modal h3 {
     text-align: center;
-    margin-top: 30px;        /* comme avant */
-    font-size: 1.4em;
+    margin: 50px; 
+    font-size: 1.6em;
 }
 
 /* Bouton fermer */
@@ -279,17 +289,18 @@ footer nav ul {
 
 /* Container images */
 .modal-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 100px);
+    padding: 0 90px;
+    display: flex;
+    flex-wrap: wrap;
     gap: 10px;
-    margin-top: 20px;
 }
 
 /* Chaque figure */
 .modal-gallery figure {
     position: relative;
-    width: 100px;
+    width: 75px;
     height: 100px;
+	margin-top: 20px;
 }
 
 .modal-gallery figure img {
@@ -317,18 +328,19 @@ footer nav ul {
     border: none;
     height: 1px;
     background-color: #ccc;
+    top: 170px;
+    position: relative;
+    width: 450px;
+    left: 75px;
 }
 
 /* Bouton ajouter une photo */
 .btn-add-photo {
-    background: #1D6154;
-    color: white;
     padding: 10px 20px;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
-    align-self: center;
-    font-size: 1em;
+	top: 155px;
+    position: relative;
 }
 
 
