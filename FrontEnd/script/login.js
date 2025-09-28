@@ -5,14 +5,23 @@
 document.addEventListener("DOMContentLoaded", () => {
     const formLogin = document.querySelector("#formLogin");
 
+    // Création d'un conteneur pour afficher les erreurs
+    const errorMessage = document.createElement("p");
+    errorMessage.classList.add("error-message");
+    formLogin.appendChild(errorMessage);
+
     formLogin.addEventListener("submit", async (e) => {
         e.preventDefault();
+
+        // Nettoie les anciens messages
+        errorMessage.textContent = "";
 
         const email = document.querySelector("#mail").value.trim();
         const password = document.querySelector("#password").value.trim();
 
         if (!email || !password) {
-            return alert("Veuillez remplir tous les champs.");
+            errorMessage.textContent = "Veuillez remplir tous les champs.";
+            return;
         }
 
         try {
@@ -30,10 +39,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Redirection vers l'accueil
                 window.location.href = "index.html";
             } else {
-                alert("Email ou mot de passe incorrect.");
+                errorMessage.textContent = "Email ou mot de passe incorrect.";
             }
         } catch (error) {
-            alert("Erreur réseau, veuillez réessayer.");
+            errorMessage.textContent = "Erreur réseau, veuillez réessayer.";
             console.error(error);
         }
     });
