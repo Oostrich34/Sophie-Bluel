@@ -67,7 +67,7 @@ export function ouvrirModaleEdition() {
     const globalError = document.createElement("p");
     globalError.classList.add("error-message");
     globalError.style.display = "none";
-    modal.appendChild(globalError);
+    separator.appendChild(globalError);
 
     function renderGallery() {
         modalTitle.textContent = "Galerie photo";
@@ -234,7 +234,7 @@ export function ouvrirModaleEdition() {
         form.appendChild(inputTitle);
         form.appendChild(labelCategory);
         form.appendChild(selectCategory);
-        form.appendChild(errorMessage);
+        separator.appendChild(errorMessage);
         container.appendChild(form);
 
         footerBtn.textContent = "Valider";
