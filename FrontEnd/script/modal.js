@@ -70,6 +70,9 @@ export function ouvrirModaleEdition() {
     separator.appendChild(globalError);
 
     function renderGallery() {
+        const existingReturnBtn = modal.querySelector(".return-btn");
+        if (existingReturnBtn) existingReturnBtn.remove();
+
         modalTitle.textContent = "Galerie photo";
         footerBtn.textContent = "Ajouter une photo";
         footerBtn.disabled = false;
@@ -164,6 +167,15 @@ export function ouvrirModaleEdition() {
         fileInput.accept = "image/png, image/jpeg";
         fileInput.id = "fileUpload";
         fileInput.style.display = "none";
+        const maxFileSize = 4 * 1024 * 1024;
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file.size > maxFileSize) {
+                globalError.textContent = 'Le fichier dépasse la limite de taille de 4 Mo.';
+                globalError.style.display = "block";
+                event.target.value = null; // Réinitialise le champ pour empêcher l'envoi
+            }
+        });
 
         const fileLabel = document.createElement("label");
         fileLabel.setAttribute("for", "fileUpload");
@@ -225,16 +237,12 @@ export function ouvrirModaleEdition() {
                 });
             })
 
-        const errorMessage = document.createElement("p");
-        errorMessage.classList.add("error-message");
-        errorMessage.style.display = "none";
 
         form.appendChild(previewContainer);
         form.appendChild(labelTitle);
         form.appendChild(inputTitle);
         form.appendChild(labelCategory);
         form.appendChild(selectCategory);
-        separator.appendChild(errorMessage);
         container.appendChild(form);
 
         footerBtn.textContent = "Valider";
@@ -246,8 +254,8 @@ export function ouvrirModaleEdition() {
             footerBtn.disabled = !ok;
             footerBtn.style.backgroundColor = ok ? "#1D6154" : "#A7A7A7";
             footerBtn.style.cursor = ok ? "pointer" : "not-allowed";
-            if (errorMessage.style.display === "block" && ok) {
-                errorMessage.style.display = "none";
+            if (globalError.style.display === "block" && ok) {
+                globalError.style.display = "none";
             }
         }
 
@@ -256,8 +264,8 @@ export function ouvrirModaleEdition() {
 
         footerBtn.onclick = async () => {
             if (footerBtn.disabled) {
-                errorMessage.textContent = "Veuillez remplir tous les champs.";
-                errorMessage.style.display = "block";
+                globalError.textContent = "Veuillez remplir tous les champs.";
+                globalError.style.display = "block";
                 return;
             }
 
@@ -278,8 +286,8 @@ export function ouvrirModaleEdition() {
                 if (!res.ok) {
                     const txt = await res.text().catch(() => null);
                     console.error("Erreur API:", res.status, txt);
-                    errorMessage.textContent = "Erreur lors de l'envoi du projet.";
-                    errorMessage.style.display = "block";
+                    globalError.textContent = "Erreur lors de l'envoi du projet.";
+                    globalError.style.display = "block";
                     footerBtn.disabled = false;
                     footerBtn.textContent = "Valider";
                     return;
@@ -291,8 +299,8 @@ export function ouvrirModaleEdition() {
                 renderGallery();
             } catch (err) {
                 console.error(err);
-                errorMessage.textContent = "Erreur réseau, veuillez réessayer.";
-                errorMessage.style.display = "block";
+                globalError.textContent = "Erreur réseau, veuillez réessayer.";
+                globalError.style.display = "block";
                 footerBtn.disabled = false;
                 footerBtn.textContent = "Valider";
             }
