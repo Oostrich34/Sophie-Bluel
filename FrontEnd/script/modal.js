@@ -43,14 +43,18 @@ export function ouvrirModaleEdition() {
     const modal = document.createElement("div");
     modal.classList.add("modal");
 
-    const modalTitle = document.createElement("h3");
-    modalTitle.textContent = "Galerie photo";
-
+    // Fermeture de la modale
     const btnClose = document.createElement("button");
     btnClose.type = "button";
     btnClose.textContent = "✖";
     btnClose.classList.add("btn-close");
     btnClose.addEventListener("click", () => overlay.remove());
+    overlay.addEventListener("click", e => {
+        if (e.target === overlay) overlay.remove();
+    });
+
+    const modalTitle = document.createElement("h3");
+    modalTitle.textContent = "Galerie photo";
 
     const container = document.createElement("div");
     container.classList.add("modal-gallery");
@@ -134,10 +138,6 @@ export function ouvrirModaleEdition() {
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
 
-    overlay.addEventListener("click", e => {
-        if (e.target === overlay) overlay.remove();
-    });
-
     function openFormView() {
         container.classList.add("modal-add-photo");
         container.innerHTML = "";
@@ -187,8 +187,11 @@ export function ouvrirModaleEdition() {
         helper.textContent = "jpg, png : 4mo max";
 
         fileInput.addEventListener("change", () => {
+            // Verification qu'un fichier est bien sélectionné
             if (fileInput.files.length > 0) {
+                // Affichage de l'aperçu
                 const reader = new FileReader();
+                // Quand le fichier est chargé, on met à jour l'aperçu
                 reader.onload = e => {
                     previewImg.src = e.target.result;
                     previewImg.style.display = "block";
@@ -196,6 +199,7 @@ export function ouvrirModaleEdition() {
                     fileLabel.style.display = "none";
                     helper.style.display = "none";
                 };
+                // Lit le fichier comme une URL de données
                 reader.readAsDataURL(fileInput.files[0]);
                 updateFooterButtonState();
             }
@@ -216,7 +220,7 @@ export function ouvrirModaleEdition() {
         inputTitle.id = "title";
         inputTitle.required = true;
 
-        // ---- Champ catégorie ----
+        // Champ catégorie
         const labelCategory = document.createElement("label");
         labelCategory.setAttribute("for", "category");
         labelCategory.textContent = "Catégorie";
@@ -258,22 +262,25 @@ export function ouvrirModaleEdition() {
                 globalError.style.display = "none";
             }
         }
-
+        
         inputTitle.addEventListener("input", updateFooterButtonState);
         selectCategory.addEventListener("change", updateFooterButtonState);
 
         footerBtn.onclick = async () => {
+            // Sécurisation au cas où
             if (footerBtn.disabled) {
                 globalError.textContent = "Veuillez remplir tous les champs.";
                 globalError.style.display = "block";
                 return;
             }
 
+            // Préparation des données
             const fd = new FormData();
             fd.append("image", fileInput.files[0]);
             fd.append("title", inputTitle.value.trim());
             fd.append("category", selectCategory.value);
 
+            // Envoi
             try {
                 footerBtn.disabled = true;
                 footerBtn.textContent = "Envoi...";
@@ -283,6 +290,7 @@ export function ouvrirModaleEdition() {
                     body: fd
                 });
 
+                // Gestion des erreurs
                 if (!res.ok) {
                     const txt = await res.text().catch(() => null);
                     console.error("Erreur API:", res.status, txt);
@@ -293,11 +301,13 @@ export function ouvrirModaleEdition() {
                     return;
                 }
 
+                // Tout est bon, on ajoute le projet à la galerie
                 const newProjet = await res.json();
                 projets.push(newProjet);
                 genererProjets(projets);
                 renderGallery();
             } catch (err) {
+                // Gestion des erreurs réseau
                 console.error(err);
                 globalError.textContent = "Erreur réseau, veuillez réessayer.";
                 globalError.style.display = "block";
